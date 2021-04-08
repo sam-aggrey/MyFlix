@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>DOCUMENTATION</title>
+    <link rel="stylesheet" href="/CSS/style.css">
+    
+   
+   
 </head>
 <body>
    <h1>Documentation Page</h1>
@@ -11,7 +15,139 @@ movies, directors, and genres, and also be able to sign up, update their
 personal information, and create a list of their favorite movies.</p>
 
 
-
-
+<table>
+  <tr>
+   <th>Request</th>
+   <th>URL</th>
+   <th>HTTP Method</th>
+   <th>Request body data format</th>
+   <th>Response body data format</th>
+  </tr>
+ <!-- 
+    GET Request: 
+      - Returns JSON object of all movies in the db
+  -->
+  <tr>
+    <td>Get a list of movies</td>
+    <td>/movies/ <br> <br>
+            URL http://localhost:8080/movies/</td>
+    <td>GET</td>
+    <td>NONE</td>
+    <td>A JSON object holding data about all the movies.</td>
+  </tr>
+  <!-- 
+    GET Request: 
+      - Returns JSON object of all details helds on the requested movie
+  -->
+  <tr>
+    <td>Get data of a single movie by title</td>
+    <td>/movies/[title] <br> <br>
+            URL http://localhost:8080/movies/Spirited%20Away</td>
+    <td>GET</td>
+    <td>NONE</td>
+    <td>A JSON object holding data about a single movie, containing title, director, genre and year property.</td>
+  </tr>
+  <!-- 
+    GET Request: 
+      - Returns JSON object of all data held on the specified genre 
+  -->
+  <tr>
+    <td>Add a new movie</td>
+    <td>/movies/ <br> <br>
+            URL http://localhost:8080/movies/</td>
+    <td>POST</td>
+    <td>A JSON object holding data about the movie to add: </td>
+    <td>A JSON object holding data about the movie that was added</td>
+  </tr>
+  <!-- 
+    GET Request:
+      - Returns JSON object of all data held on director of the specified movie
+  -->
+  <tr>
+    <td>Delete a movie</td>
+    <td>/movies/[title] <br> <br>
+            URL http://localhost:8080/movies/Spirited%20Away</td>
+    <td>DELETE</td>
+    <td>NONE</td>
+    <td>A text message indicating whether the movie was successfully removed</td>
+  </tr>
+  <!-- 
+    POST Requet:
+      - Expects JSON object of user that should be created
+      - Returns JSON object of user that was created
+  -->
+  <tr>
+    <td>Get a list of users</td>
+    <td>/users/ <br> <br>
+            URL http://localhost:8080/users/</td>
+    <td>GET</td>
+    <td>JSON</td>
+    <td>A JSON object holding data about all the users</td>
+  </tr>
+  <!-- 
+    PUT Request
+      - Returns JSON object of the updated user
+  -->
+  <tr>
+    <td>Add a new user</td>
+    <td>/users/ <br> <br>
+            URL http://localhost:8080/users/</td>
+    <td>POST</td>
+    <td>A JSON object holding data about the user to add</td>
+    <td>A JSON object holding data about the user that was added</td>
+  </tr>
+  <!-- 
+    PUT Request
+      - Expects JSON object of all user attributes with updated information
+      - Return JSON object of all data held after update
+  -->
+  <tr>
+    <td>Delete a username</td>
+    <td>/users/[name] <br> <br>
+            URL http://localhost:8080/users/April</td>
+    <td>DELETE</td>
+    <td>NONE</td>
+    <td>A text message indicating whether the user was successfully removed</td>
+  </tr>
+  <!-- 
+    DELTE Request
+      - Returns JSON object of the respective user
+  -->
+  <tr>
+    <td>Update a username</td>
+    <td>/users/[name] <br> <br>
+            URL http://localhost:8080/users/April</td>
+    <td>PUT</td>
+    <td>NONE</td>
+    <td>A text message indicating whether the user was successfully updated </td>
+      </tr>
+  <!-- 
+    DELTE Request
+      - Returns success message
+  -->
+  <tr>
+  <td>Get a movie description by genre</td>
+        <td>/movies/genres/[genre] <br> <br>
+            URL http://localhost:8080/movies/genres/Action
+        </td>
+        <td>GET</td>
+        <td>None</td>
+        <td>A text message indicating the description of the movie.</td>
+      </tr>
+      
+      <tr>
+        <td>Get information of a director</td>
+        <td>/movies/directors/[directorname] <br> <br>
+            URL http://localhost:8080/movies/directors/Peter%20Jackson
+        </td>
+        <td>GET</td>
+        <td>None</td>
+        <td>A text message indicating the information of a director.</td>
+      </tr>
+</table>
+  
 </body>
 </html>
+
+
+ 
