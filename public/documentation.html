@@ -47,10 +47,7 @@ personal information, and create a list of their favorite movies.</p>
     <td>NONE</td>
     <td>A JSON object holding data about a single movie, containing title, director, genre and year property.</td>
   </tr>
-  <!-- 
-    GET Request: 
-      - Returns JSON object of all data held on the specified genre 
-  -->
+ 
   <tr>
     <td>Add a new movie</td>
     <td>/movies/ <br> <br>
@@ -96,23 +93,78 @@ personal information, and create a list of their favorite movies.</p>
     <td>A JSON object holding data about the user to add</td>
     <td>A JSON object holding data about the user that was added</td>
   </tr>
-  <!-- 
-    PUT Request
-      - Expects JSON object of all user attributes with updated information
-      - Return JSON object of all data held after update
-  -->
+   
+   
   <tr>
     <td>Delete a username</td>
     <td>/users/[name] <br> <br>
-            URL http://localhost:8080/users/April</td>
+            URL http://localhost:8080/users/samagg</td>
     <td>DELETE</td>
     <td>NONE</td>
     <td>A text message indicating whether the user was successfully removed</td>
   </tr>
+  
+  <tr>
+   <td>Allow new users to register</td>
+          <td>/users/ <br> <br>
+              URL http://localhost:8080/users/
+          </td>
+          <td>POST</td>
+      <td>A JSON object holding data about the user to add. Example: </td><br>
+            
+          <td>A JSON object holding data about the user that was added, including an ID. Example: <br>
+            </td>
+        </tr>
+        
+        <tr>
+          <td>Allow users to update user info</td>
+          <td>/users/[username] <br> <br>
+              URL http://localhost:8080/users/Dave%20Martins
+          </td>
+          <td>GET</td>
+            <td>A JSON object holding data about the user to be updated. Example:</td> <br>
+           
+          <td>A JSON object holding data about the user's updated data, including an ID. Example:</td> <br>
+            
+            
+        </tr>
+        
+        <tr>
+          <td>Allow users to add a movie to their list of favorites</td>
+          <td>/users/[name]/movies/[MovieID] <br> <br>
+              URL http://localhost:8080/users/Dave%20Martins/movies/606d8895f38d1885ddd604f6
+          </td>
+          <td>PUT</td>
+          <td>None</td>
+          <td>A JSON object holding user data including updated movie Id. Example: </td> <br>
+            
+        </tr>
+        
+        <tr>
+          <td>Allow users to remove a movie from their list of favorites</td>
+          <td>/users/[name]/movies/[MovieID] <br> <br>
+              URL http://localhost:8080/users/Dave%20Martins/movies/606d8895f38d1885ddd604f6
+          </td>
+          <td>DELETE</td>
+          <td>None</td>
+          <td>A text message indicating that the deletion was successful. Example: <br>
+             "606d8895f38d1885ddd604f6 has been removed from user's favorite movies."</td>
+        </tr>
+        <tr>
+          <td>Allow existing users to deregister</td>
+          <td>/users/[name] <br> <br>
+              URL http://localhost:8080/users/Dave%20GMartins
+          </td>
+          <td>DELETE</td>
+          <td>None</td>
+          <td>A text message indicating that the deletion was successful. Example: <br>
+            June Go was deleted.</td>
+        </tr>
+        
   <!-- 
     DELTE Request
       - Returns JSON object of the respective user
-  -->
+  
   <tr>
     <td>Update a username</td>
     <td>/users/[name] <br> <br>
