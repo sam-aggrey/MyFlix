@@ -29,7 +29,7 @@ let movies = [
         imdbrank: 1
     },
     {
-        title: 'The Lord of the Rings: The Fellowship of the Ring',
+        title: 'The Lord of the Ring',
         director: {
             name: 'Peter Jackson',
             birthyear: 1961,
@@ -86,13 +86,7 @@ app.use(bodyParser.json());
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Something broke!');
-}); /* an error-handling middleware function that will log all application-level
-  errors to the terminal */
-
-// Create the route for the requests, including a response that indicates the action
-/* app.get('/movies', (req, res) => {
-    res.send('Successful GET request returning data on all the movies.');
-  }); */
+});
 
 // default text response
 app.get('/', (req, res) => {
@@ -153,6 +147,9 @@ app.get('/movies/directors/:name', (req, res) => {
     }
     //res.send('Here is the data of the director!');
 });
+
+// gets details of a director of a movie
+
 
 // Adds a new movie (with data) to our list of movies
 app.post('/movies', (req, res) => {
@@ -216,9 +213,9 @@ app.get('/users', (req, res) => {
 
 // Get the data of a user, by username
 app.get('/users/:username', (req, res) => {
-    Movies.findOne({ UserName: req.params.UserName })
-        .then((movie) => {
-            res.status(201).json(movie);
+    Users.findOne({ Username: req.params.Username })
+        .then((users) => {
+            res.status(201).json(users);
         })
         .catch((err) => {
             console.error(err);
