@@ -6,7 +6,8 @@ const express = require('express'),
 const app = express();
 const mongoose = require('mongoose'); 
 const Models = require('./models.js'); 
-
+const passport = require('passport');
+require('./passport');
 
 
 const Movies = Models.Movie; 
@@ -25,7 +26,7 @@ app.use(morgan('common'));
 app.use(express.static('public')); /* Use express.static to serve your “documentation.html” file from the
 public folder (rather than using the http, url, and fs modules). */
 app.use(bodyParser.json());
-
+let auth = require('./auth')(app);
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
@@ -40,7 +41,7 @@ app.get('/', (req, res) => {
 
 
 // return JSON object when at /movies 
-app.get('/movies', (req, res) => {
+app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
     Movies.find()
         .then((movies) => {
             res.json(movies);
