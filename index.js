@@ -1,11 +1,13 @@
 const express = require('express'),
     morgan = require('morgan'),
     bodyParser = require('body-parser');
-   // uuid = require('uuid');
 
+   // uuid = require('uuid');
 const app = express();
 const mongoose = require('mongoose'); 
 const Models = require('./models.js'); 
+
+
 
 const Movies = Models.Movie; 
 const Users = Models.User; 
@@ -15,74 +17,16 @@ const Directors = Models.Director;
 // Integrating Mongoose with a REST API
 mongoose.connect('mongodb://localhost:27017/test', { useNewUrlParser: true, useUnifiedTopology: true });
 
-let movies = [
-    {
-        title: 'The Lord of the Rings: The Return of the King',
-        director: {
-            name: 'Peter Jackson',
-            birthyear: 1961,
-            deathyear: 'Not applicable',
-            bio: 'Peter Jackson was born as an only child in a small coast-side town in New Zealand in 1961.',
-        },
-        genre: ['Action', 'Adventure', 'Drama'],
-        year: 2003,
-        imdbrank: 1
-    },
-    {
-        title: 'The Lord of the Ring',
-        director: {
-            name: 'Peter Jackson',
-            birthyear: 1961,
-            deathyear: 'Not applicable',
-            bio: 'Peter Jackson was born as an only child in a small coast-side town in New Zealand in 1961.',
-        },
-        genre: ['Action', 'Adventure', 'Drama'],
-        year: 2001,
-        imdbrank: 2
-    },
-    {
-        title: 'The Lord of the Rings: The Two Towers',
-        director: {
-            name: 'Peter Jackson',
-            birthyear: 1961,
-            deathyear: 'Not applicable',
-            bio: 'Peter Jackson was born as an only child in a small coast-side town in New Zealand in 1961.',
-        },
-        genre: ['Action', 'Adventure', 'Drama'],
-        year: 2002,
-        imdbrank: 3
-    },
-    {
-        title: 'Star Wars: Episode V - The Empire Strikes Back ',
-        director: {
-            name: 'Irvin Kershner',
-            birthyear: 1923,
-            deathyear: 2010,
-            bio: 'Irvin Kershner was born on April 29, 1923 in Philadelphia, Pennsylvania. A graduate of the University of Southern California film school, Kershner began his career in 1950, producing documentaries for the United States Information Service in the Middle East.',
-        },
-        genre: ['Action', 'Adventure', 'Fantasy'],
-        year: 1980,
-        imdbrank: 4
-    },
-    {
-        title: 'Spirited Away',
-        director: {
-            name: 'Hayao Miyazaki',
-            birthyear: 1941,
-            deathyear: 'Not applicable',
-            bio: 'Hayao Miyazaki is one of the greatest animation directors in Japan. The entertaining plots, compelling characters, and breathtaking animation in his films have earned him international renown from critics as well as public recognition within Japan.',
-        },
-        genre: ['Action', 'Adventure', 'Family'],
-        year: 2001,
-        imdbrank: 5
-    }
-];
+
 
 // Middleware
 app.use(morgan('common'));
+
 app.use(express.static('public')); /* Use express.static to serve your “documentation.html” file from the
 public folder (rather than using the http, url, and fs modules). */
 app.use(bodyParser.json());
+
+
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Something broke!');
@@ -122,58 +66,95 @@ app.get('/movies/:title', (req, res) => {
 
 // Get the movie description by genre
 app.get('/movies/genres/:name', (req, res) => {
-    let movieList = movies.filter((movie) => { return movie.genre.includes(req.params.name) });
-    res.json(movieList);
-    //res.send('Here is a description of the ________ movie genre!');
+    
+ Movies.findOne({ "Genre.Name": req.params.name})
+   .then((movie) => {
+            res.status(201).json(movie);
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send('Error: ' + err);
+        });
+    
 });
 
-// Get the movie description by genre
-app.get('/movies/multigenres/:names', (req, res) => {
-    // "action+drama+fantasy"
-    let genres = req.params.names.split("+"); // ["action", "drama", "fantasy"]
-    let movieList = movies.filter((movie) => { return genres.every((genre) => { return movie.genre.includes(genre)}) });
-    res.json(movieList);
-    //res.send('Here is a description of the ________ movie genre!');
-});
+
+
 
 // Gets the data of a director
 app.get('/movies/directors/:name', (req, res) => {
-    let matchMovie = movies.find((movie) => { return movie.director.name === req.params.name });
+
+    Movies.findOne({ "Director.Name": req.params.name})
+   .then((movie) => {
+            res.status(201).json(movie);
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send('Error: ' + err);
+        });
     
-    if (matchMovie) {
-        res.json(matchMovie.director);
-    } else {
-        res.status(404).send("Cound not find the director!");
-    }
     //res.send('Here is the data of the director!');
 });
 
-// gets details of a director of a movie
 
 
 // Adds a new movie (with data) to our list of movies
 app.post('/movies', (req, res) => {
     
-    let newMovie = req.body;
-  
-    if (!newMovie.title) {
-      const message = 'Missing title in request body';
-      res.status(400).send(message);
-    } else {
-      //newMovie.id = uuid.v4();
-      movies.push(newMovie);
-      res.status(201).send(newMovie);
-    }
+//    let newMovie = req.body;
+//  
+//    if (!newMovie.title) {
+//      const message = 'Missing title in request body';
+//      res.status(400).send(message);
+//    } else {
+//      //newMovie.id = uuid.v4();
+//      movies.push(newMovie);
+//      res.status(201).send(newMovie);
+//    }
+    
+    console.log(req.body)
+    Movies.findOne({ Title: req.body.Title })
+        .then((movie) => {
+            if (movie) {
+                return res.status(400).send(req.body.Title + 'already exists');
+            } else {
+                console.log(req.body.Title)
+                 Movies
+                     .create({
+                         Title: req.body.Title,
+                         Description: req.body.Description,
+                         
+                      })
+                     .then((movie) => {res.status(201).json(movie) })
+                 .catch((error) => {
+                     console.error(error);
+                     res.status(500).send('Error: ' + error);
+                 })
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).send('Error: ' + error);
+        });
 });
+
 
 // Delete a movie from list, by title
 app.delete('/movies/:title', (req, res) => {
-    let movie = movies.find((movie) => { return movie.title === req.params.title });
-  
-    if (movie) {
-        movies = movies.filter((obj) => { return obj.title !== req.params.title });
-        res.status(201).send('Movie ' + req.params.title + ' was deleted.');
-    }
+
+    Movies.findOneAndRemove({ Title: req.params.title }) // Finds a movie by title and removes them from the database
+      .then((movie) => {
+          if (!movie) {
+              res.status(400).send(req.params.title + ' was not found'); // Shown if movie title was not found in database
+          } else {
+              res.status(200).send(req.params.title + ' was deleted.'); // Shown if the movie title was found in the database and removed
+          }
+      })
+      .catch((err) => {
+          console.error(err);
+          res.status(500).send('Error: ' + err);
+      });
+    
   });
 
 
