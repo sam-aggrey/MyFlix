@@ -22,7 +22,7 @@ const Directors = Models.Director;
 //mongoose.connect('mongodb://localhost:27017/test', { useNewUrlParser: true, useUnifiedTopology: true });
 
 mongoose.set('bufferCommands', false);
-mongoose.connect('mongodb+srv://sam:Mongodb@myflixdb.raqpw.mongodb.net/myFlixDB?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 
 
