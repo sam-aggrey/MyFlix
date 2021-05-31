@@ -2,8 +2,7 @@ const express = require('express'),
     morgan = require('morgan'),
     bodyParser = require('body-parser');
 
-
-   // uuid = require('uuid');
+ // uuid = require('uuid');
 const app = express();
 const mongoose = require('mongoose'); 
 const Models = require('./models.js'); 
@@ -23,10 +22,6 @@ const Directors = Models.Director;
 
 mongoose.set('bufferCommands', false);
 mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-
-
-
-
 
 
 // Middleware
@@ -57,12 +52,10 @@ app.use((err, req, res, next) => {
 });
 
 
-
 // default text response
 app.get('/', (req, res) => {
     res.send('Welcome to my movie API!');
 });
-
 
 
 // return JSON object when at /movies 
@@ -101,10 +94,7 @@ app.get('/movies/genres/:name', passport.authenticate('jwt', { session: false })
             console.error(err);
             res.status(500).send('Error: ' + err);
         });
-    
 });
-
-
 
 
 // Gets the data of a director
@@ -118,17 +108,11 @@ app.get('/movies/directors/:name', passport.authenticate('jwt', { session: false
             console.error(err);
             res.status(500).send('Error: ' + err);
         });
-    
-    //res.send('Here is the data of the director!');
 });
-
 
 
 // Adds a new movie (with data) to our list of movies
 app.post('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
-    
-
-    
     console.log(req.body)
     Movies.findOne({ Title: req.body.Title })
         .then((movie) => {
@@ -158,8 +142,7 @@ app.post('/movies', passport.authenticate('jwt', { session: false }), (req, res)
 
 // Delete a movie from list, by title
 app.delete('/movies/:title', passport.authenticate('jwt', { session: false }), (req, res) => {
-
-    Movies.findOneAndRemove({ Title: req.params.title }) // Finds a movie by title and removes them from the database
+Movies.findOneAndRemove({ Title: req.params.title }) // Finds a movie by title and removes them from the database
       .then((movie) => {
           if (!movie) {
               res.status(400).send(req.params.title + ' was not found'); // Shown if movie title was not found in database
@@ -171,17 +154,14 @@ app.delete('/movies/:title', passport.authenticate('jwt', { session: false }), (
           console.error(err);
           res.status(500).send('Error: ' + err);
       });
-    
-  });
-
-
+    });
 
 
 // Get all users 
 app.get('/users', passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.find()
         .then((users) => {
-            res.status(201).json(users);
+        res.status(201).json(users);
         })
         .catch((err) => {
             console.error(err);
@@ -203,11 +183,8 @@ app.get('/users/:username', passport.authenticate('jwt', { session: false }), (r
 });
 
 
-
 // Add a new user (with data) to our list of users
-app.post('/users',
-    
-    
+app.post('/users', 
     [
     check('Username', 'Username is required').isLength({min: 5}),
     check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
@@ -217,12 +194,10 @@ app.post('/users',
 
   // check the validation object for errors
     let errors = validationResult(req);
-
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() });
     }
-    
-    let hashedPassword = Users.hashPassword(req.body.Password);
+     let hashedPassword = Users.hashPassword(req.body.Password);
     console.log(req.body)
     Users.findOne({ Username: req.body.Username })
         .then((user) => {
@@ -251,7 +226,6 @@ app.post('/users',
   });
 
 
-
 // Delete a user by username
 app.delete('/users/:username', passport.authenticate('jwt', { session: false }), (req, res) => {
  Users.findOneAndRemove({ Username: req.params.username }) // Finds a user by username and removes them from the database
@@ -261,12 +235,13 @@ app.delete('/users/:username', passport.authenticate('jwt', { session: false }),
           } else {
               res.status(200).send(req.params.username + ' was deleted.'); // Shown if the username was found in the database and removed
           }
-      })
+ })
       .catch((err) => {
           console.error(err);
           res.status(500).send('Error: ' + err);
       });
 });  
+
 
 // Update the "name" of a user
 app.put('/users/:Username', passport.authenticate('jwt', { session: false }), [
@@ -275,14 +250,12 @@ app.put('/users/:Username', passport.authenticate('jwt', { session: false }), [
 	check('Password', 'password is required').not().isEmpty(),
 	check('Email', 'Email does not appear to be valid').isEmail()
 	],(req, res) => {
+    let hashedUsername = Users.hashUsername(req.body.Username);
   Users.findOneAndUpdate({ Username: req.params.Username }, 
-      
-     {  
-   
-      $set:{ 
-    
+       {  
+   $set:{ 
       Username: req.body.Username,
-      Password: req.body.Password,
+      Password: req.body.hashUsername,
       Email: req.body.Email,
       Birthday: req.body.Birthday
     }
@@ -297,6 +270,7 @@ app.put('/users/:Username', passport.authenticate('jwt', { session: false }), [
     }
   });
 });
+
 
 // Add a movie to a user's list of favorites
 app.post('/users/:Username/Movies/:MovieID', passport.authenticate('jwt', { session: false }), (req, res) => {
