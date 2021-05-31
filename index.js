@@ -232,12 +232,12 @@ app.put('/users/:Username', passport.authenticate('jwt', { session: false }), [
 	check('Password', 'password is required').not().isEmpty(),
 	check('Email', 'Email does not appear to be valid').isEmail()
 	],(req, res) => {
-    let hashedUsername = Users.hashUsername(req.body.Username);
+    let hashPassword = Users.hashPassword(req.body.Username);
   Users.findOneAndUpdate({ Username: req.params.Username }, 
        {  
    $set:{ 
       Username: req.body.Username,
-      Password: req.body.hashUsername,
+      Password: req.body.hashPassword ,
       Email: req.body.Email,
       Birthday: req.body.Birthday
     }
