@@ -243,7 +243,7 @@ app.delete('/users/:username', passport.authenticate('jwt', { session: false }),
 });  
 
 
-// Update the "name" of a user
+// Update user information
 app.put('/users/:Username', passport.authenticate('jwt', { session: false }), [
 	check('Username', 'Username is required').isLength({min: 5}),
 	check('Username', 'Username contains non alphanumeric characters- not allowed.').isAlphanumeric(),
