@@ -1,8 +1,6 @@
 const express = require('express'),
-    morgan = require('morgan'),
-    bodyParser = require('body-parser');
-
- // uuid = require('uuid');
+morgan = require('morgan'),
+bodyParser = require('body-parser');
 const app = express();
 const mongoose = require('mongoose'); 
 const Models = require('./models.js'); 
@@ -10,8 +8,6 @@ const passport = require('passport');
 require('./passport');
 const cors = require('cors');
 const { check, validationResult } = require('express-validator');
-
-
 const Movies = Models.Movie; 
 const Users = Models.User; 
 const Genres = Models.Genre; 
@@ -19,14 +15,11 @@ const Directors = Models.Director;
 
 // Integrating Mongoose with a REST API
 //mongoose.connect('mongodb://localhost:27017/test', { useNewUrlParser: true, useUnifiedTopology: true });
-
 mongoose.set('bufferCommands', false);
 mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
-
 // Middleware
 app.use(morgan('common'));
-
 app.use(express.static('public')); /* Use express.static to serve your “documentation.html” file from the
 public folder (rather than using the http, url, and fs modules). */
 app.use(bodyParser.json());
@@ -34,7 +27,6 @@ let auth = require('./auth')(app);
 
 // Listing only allowed domain to be allowed access
 let allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
-
 app.use(cors({
   origin: (origin, callback) => {
     if(!origin) return callback(null, true);
@@ -57,7 +49,6 @@ app.get('/', (req, res) => {
     res.send('Welcome to my movie API!');
 });
 
-
 // return JSON object when at /movies 
 app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
     Movies.find()
@@ -69,7 +60,6 @@ app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) 
             res.status(500).send('Error: ' + err);
         });
 });
-
 
 // Get the data of a movie, by title
 app.get('/movies/:title', passport.authenticate('jwt', { session: false }), (req, res) => {
@@ -96,7 +86,6 @@ app.get('/movies/genres/:name', passport.authenticate('jwt', { session: false })
         });
 });
 
-
 // Gets the data of a director
 app.get('/movies/directors/:name', passport.authenticate('jwt', { session: false }), (req, res) => {
 
@@ -109,7 +98,6 @@ app.get('/movies/directors/:name', passport.authenticate('jwt', { session: false
             res.status(500).send('Error: ' + err);
         });
 });
-
 
 // Adds a new movie (with data) to our list of movies
 app.post('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
@@ -139,7 +127,6 @@ app.post('/movies', passport.authenticate('jwt', { session: false }), (req, res)
         });
 });
 
-
 // Delete a movie from list, by title
 app.delete('/movies/:title', passport.authenticate('jwt', { session: false }), (req, res) => {
 Movies.findOneAndRemove({ Title: req.params.title }) // Finds a movie by title and removes them from the database
@@ -156,7 +143,6 @@ Movies.findOneAndRemove({ Title: req.params.title }) // Finds a movie by title a
       });
     });
 
-
 // Get all users 
 app.get('/users', passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.find()
@@ -169,7 +155,6 @@ app.get('/users', passport.authenticate('jwt', { session: false }), (req, res) =
         });
 });
 
-
 // Get the data of a user, by username
 app.get('/users/:username', passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.findOne({ Username: req.params.username })
@@ -181,7 +166,6 @@ app.get('/users/:username', passport.authenticate('jwt', { session: false }), (r
             res.status(500).send('Error: ' + err);
         });
 });
-
 
 // Add a new user (with data) to our list of users
 app.post('/users', 
@@ -225,7 +209,6 @@ app.post('/users',
         });
   });
 
-
 // Delete a user by username
 app.delete('/users/:username', passport.authenticate('jwt', { session: false }), (req, res) => {
  Users.findOneAndRemove({ Username: req.params.username }) // Finds a user by username and removes them from the database
@@ -241,7 +224,6 @@ app.delete('/users/:username', passport.authenticate('jwt', { session: false }),
           res.status(500).send('Error: ' + err);
       });
 });  
-
 
 // Update user information
 app.put('/users/:Username', passport.authenticate('jwt', { session: false }), [
@@ -270,7 +252,6 @@ app.put('/users/:Username', passport.authenticate('jwt', { session: false }), [
     }
   });
 });
-
 
 // Add a movie to a user's list of favorites
 app.post('/users/:Username/Movies/:MovieID', passport.authenticate('jwt', { session: false }), (req, res) => {
