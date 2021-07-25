@@ -49,28 +49,28 @@ app.get('/', (req, res) => {
     res.send('Welcome to my movie API!');
 });
 
- return JSON object when at /movies 
-app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Movies.find()
-        .then((movies) => {
-            res.json(movies);
-        })
-        .catch((err) => {
-            console.error(err);
-            res.status(500).send('Error: ' + err);
-        });
-});
-// removed the authentication for a demostration
-//app.get("/movies", function (req, res) {
-//  Movies.find()
-//    .then(function (movies) {
-//      res.status(201).json(movies);
-//    })
-//    .catch(function (error) {
-//      console.error(error);
-//      res.status(500).send("Error: " + error);
-//    });
+// return JSON object when at /movies 
+//app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
+//    Movies.find()
+//        .then((movies) => {
+//            res.json(movies);
+//        })
+//        .catch((err) => {
+//            console.error(err);
+//            res.status(500).send('Error: ' + err);
+//        });
 //});
+// removed the authentication for a demostration
+app.get("/movies", function (req, res) {
+  Movies.find()
+    .then(function (movies) {
+      res.status(201).json(movies);
+    })
+    .catch(function (error) {
+      console.error(error);
+      res.status(500).send("Error: " + error);
+    });
+});
 
 // Get the data of a movie, by title
 app.get('/movies/:title', passport.authenticate('jwt', { session: false }), (req, res) => {
