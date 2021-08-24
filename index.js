@@ -46,7 +46,7 @@ app.use((err, req, res, next) => {
 
 // default text response
 app.get('/', (req, res) => {
-    res.send('Welcome to my movie API!');
+    res.send('Welcome to my movie API testing!');
 });
 
 // return JSON object when at /movies 
@@ -85,7 +85,7 @@ app.get('/movies/:title', passport.authenticate('jwt', { session: false }), (req
 });
 
 // Get the movie description by genre
-app.get('/movies/genres/:name', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.get('/movies/genres/:name',/* passport.authenticate('jwt', { session: false })*/, (req, res) => {
     
  Movies.findOne({ "Genre.Name": req.params.name})
    .then((movie) => {
