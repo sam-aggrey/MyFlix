@@ -46,11 +46,11 @@ app.use((err, req, res, next) => {
 
 // default text response
 app.get('/', (req, res) => {
-    res.send('Welcome to my movie API testing!');
+    res.send('Welcome to my movie API!');
 });
 
 // return JSON object when at /movies 
-app.get('/movies', /*passport.authenticate('jwt', { session: false }),*/ (req, res) => {
+app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
     Movies.find()
         .then((movies) => {
             res.json(movies);
