@@ -15,7 +15,7 @@ const Directors = Models.Director;
 
 
 // Integrating Mongoose with a REST API
-mongoose.connect('mongodb://localhost:27017/test', { useNewUrlParser: true, useUnifiedTopology: true });
+//mongoose.connect('mongodb://localhost:27017/test', { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.set('bufferCommands', false);
 mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
