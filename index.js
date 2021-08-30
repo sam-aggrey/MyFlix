@@ -51,7 +51,7 @@ app.get('/', (req, res) => {
 });
 
 // return JSON object when at /movies 
-app.get('/movies', /*passport.authenticate('jwt', { session: false }), */(req, res) => {
+app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
     Movies.find()
         .then((movies) => {
             res.json(movies);
@@ -156,7 +156,7 @@ Movies.findOneAndRemove({ Title: req.params.title }) // Finds a movie by title a
     });
 
 // Get all users 
-app.get('/users', /*passport.authenticate('jwt', { session: false }),*/ (req, res) => {
+app.get('/users', passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.find()
         .then((users) => {
         res.status(201).json(users);
