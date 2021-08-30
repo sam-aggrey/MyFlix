@@ -27,7 +27,7 @@ app.use(bodyParser.json());
 let auth = require('./auth')(app);
 
 // Listing only allowed domain to be allowed access
-let allowedOrigins = ['http://localhost:8080', 'http://localhost:1234', 'http://testsite.com'];
+let allowedOrigins = ['http://localhost:8080', 'http://localhost:1234', 'http://testsite.com', 'https://sammy-flix.herokuapp.com/'];
 app.use(cors({
   origin: (origin, callback) => {
     if(!origin) return callback(null, true);
@@ -47,7 +47,7 @@ app.use((err, req, res, next) => {
 
 // default text response
 app.get('/', (req, res) => {
-    res.send('Welcome to my movie APIss!');
+    res.send('Welcome to my movie API!');
 });
 
 // return JSON object when at /movies 
