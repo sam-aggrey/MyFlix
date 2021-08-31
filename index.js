@@ -24,7 +24,7 @@ app.use(morgan('common'));
 app.use(express.static('public')); /* Use express.static to serve your “documentation.html” file from the
 public folder (rather than using the http, url, and fs modules). */
 app.use(bodyParser.json());
-let auth = require('./auth')(app);
+
 
 // Listing only allowed domain to be allowed access
 let allowedOrigins = ['http://localhost:8080', 'http://localhost:1234', 'http://testsite.com', 'https://sammy-flix.herokuapp.com/'];
@@ -38,6 +38,8 @@ app.use(cors({
     return callback(null, true);
   }
 }));
+
+let auth = require('./auth')(app);
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
