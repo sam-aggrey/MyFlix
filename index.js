@@ -283,6 +283,32 @@ app.post('/users/:Username/Movies/:MovieID', passport.authenticate('jwt', { sess
   });
 });
 
+//  removes movie from user's favorites list
+//  upon success, returns confirmation
+//  √ working, validation √
+app.delete(
+  '/users/:Username/movies/:MovieID',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Users.findOneAndUpdate(
+      { Username: req.params.Username },
+      { $pull: { FavoriteMovies: req.params.MovieID } },
+      (err) => {
+        if (err) {
+          console.error(err);
+          res.status(500).send('Error: ' + err);
+        } else {
+          Users.find({
+            Username: req.params.Username,
+          }).then((user) => {
+            res.status(200).json(user[0].FavoriteMovies);
+          });
+        }
+      }
+    );
+  }
+);
+
 // listen for requests
 const port = process.env.PORT || 8080;
 app.listen(port, '0.0.0.0',() => {
