@@ -2,16 +2,16 @@ const express = require('express'),
 morgan = require('morgan'),
 bodyParser = require('body-parser');
 const app = express();
-const mongoose = require('mongoose'); 
-const Models = require('./models.js'); 
+const mongoose = require('mongoose');
+const Models = require('./models.js');
 const passport = require('passport');
 require('./passport');
 const cors = require('cors');
 const { check, validationResult } = require('express-validator');
-const Movies = Models.Movie; 
-const Users = Models.User; 
-const Genres = Models.Genre; 
-const Directors = Models.Director; 
+const Movies = Models.Movie;
+const Users = Models.User;
+const Genres = Models.Genre;
+const Directors = Models.Director;
 
 
 // Integrating Mongoose with a REST API
@@ -27,7 +27,7 @@ app.use(bodyParser.json());
 
 
 // Listing only allowed domain to be allowed access
-let allowedOrigins = ['http://localhost:8080', 'http://localhost:1234', 'http://testsite.com', 'https://sammy-flix.herokuapp.com/'];
+let allowedOrigins = ['http://localhost:8080', 'http://localhost:1234', 'http://testsite.com', 'https://sammy-flix.herokuapp.com/' ,'https://sam-flix.netlify.app/'];
 app.use(cors({
   origin: (origin, callback) => {
     if(!origin) return callback(null, true);
@@ -52,7 +52,7 @@ app.get('/', (req, res) => {
     res.send('Welcome to my movie API!');
 });
 
-// return JSON object when at /movies 
+// return JSON object when at /movies
 app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
     Movies.find()
         .then((movies) => {
@@ -89,7 +89,7 @@ app.get('/movies/:title', passport.authenticate('jwt', { session: false }), (req
 
 // Get the movie description by genre
 app.get('/movies/genres/:name', passport.authenticate('jwt', { session: false }), (req, res) => {
-    
+
  Movies.findOne({ "Genre.Name": req.params.name})
    .then((movie) => {
             res.status(201).json(movie);
@@ -126,7 +126,7 @@ app.post('/movies', passport.authenticate('jwt', { session: false }), (req, res)
                      .create({
                          Title: req.body.Title,
                          Description: req.body.Description,
-                         
+
                       })
                      .then((movie) => {res.status(201).json(movie) })
                  .catch((error) => {
@@ -157,7 +157,7 @@ Movies.findOneAndRemove({ Title: req.params.title }) // Finds a movie by title a
       });
     });
 
-// Get all users 
+// Get all users
 app.get('/users', passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.find()
         .then((users) => {
@@ -182,7 +182,7 @@ app.get('/users/:username', passport.authenticate('jwt', { session: false }), (r
 });
 
 // Add a new user (with data) to our list of users
-app.post('/users', 
+app.post('/users',
     [
     check('Username', 'Username is required').isLength({min: 5}),
     check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
@@ -237,7 +237,7 @@ app.delete('/users/:username', passport.authenticate('jwt', { session: false }),
           console.error(err);
           res.status(500).send('Error: ' + err);
       });
-});  
+});
 
 // Update user information
 app.put('/users/:Username', passport.authenticate('jwt', { session: false }), [
@@ -247,9 +247,9 @@ app.put('/users/:Username', passport.authenticate('jwt', { session: false }), [
 	check('Email', 'Email does not appear to be valid').isEmail()
 	],(req, res) => {
     let hashPassword = Users.hashPassword(req.body.Password);
-  Users.findOneAndUpdate({ Username: req.params.Username }, 
-       {  
-   $set:{ 
+  Users.findOneAndUpdate({ Username: req.params.Username },
+       {
+   $set:{
       Username: req.body.Username,
       Password: req.body.hashPassword ,
       Email: req.body.Email,
