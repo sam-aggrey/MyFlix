@@ -281,7 +281,7 @@ app.post('/users/:Username/Movies/:MovieID', passport.authenticate('jwt', { sess
       console.error(err);
       res.status(500).send('Error: ' + err);
     } else {
-      res.json(updatedUser);
+      res.json(updatedUser.FavoriteMovies);
     }
   });
 });
