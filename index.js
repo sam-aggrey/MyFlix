@@ -241,17 +241,17 @@ app.delete('/users/:username', passport.authenticate('jwt', { session: false }),
 
 // Update user information
 app.put('/users/:Username', passport.authenticate('jwt', { session: false }), [
-	check('Username', 'Username is required').isLength({min: 5}),
-	check('Username', 'Username contains non alphanumeric characters- not allowed.').isAlphanumeric(),
-	check('Password', 'password is required').not().isEmpty(),
-	check('Email', 'Email does not appear to be valid').isEmail()
+	check('Username', 'Username is required').isLength({min: 5}).optional(),
+	check('Username', 'Username contains non alphanumeric characters- not allowed.').isAlphanumeric().optional(),
+	check('Password', 'password is required').optional(),
+	check('Email', 'Email does not appear to be valid').isEmail().optional()
 	],(req, res) => {
     let hashPassword = Users.hashPassword(req.body.Password);
   Users.findOneAndUpdate({ Username: req.params.Username },
        {
    $set:{
       Username: req.body.Username,
-      Password: req.body.hashPassword ,
+      Password: req.body.hashPassword,
       Email: req.body.Email,
       Birthday: req.body.Birthday
     }
