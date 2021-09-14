@@ -276,12 +276,12 @@ app.post('/users/:Username/Movies/:MovieID', passport.authenticate('jwt', { sess
      $push: { FavoriteMovies: req.params.MovieID }
    },
    { new: true }, // This line makes sure that the updated document is returned
-  (err, user) => {
+  (err, updatedUser) => {
     if (err) {
       console.error(err);
       res.status(500).send('Error: ' + err);
     } else {
-      res.status(200).json(user[0].FavoriteMovies);
+      res.json(updatedUser);
     }
   });
 });
