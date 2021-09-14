@@ -246,7 +246,7 @@ app.put('/users/:Username', passport.authenticate('jwt', { session: false }), [
 	check('Password', 'password is required').optional(),
 	check('Email', 'Email does not appear to be valid').isEmail().optional()
 	],(req, res) => {
-    let hashPassword = Users.hashPassword(req.body.Password);
+    //let hashPassword = Users.hashPassword(req.body.Password);
   Users.findOneAndUpdate({ Username: req.params.Username },
 
 
